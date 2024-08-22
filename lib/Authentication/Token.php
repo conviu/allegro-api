@@ -63,7 +63,7 @@ final readonly class Token
             $now = new DateTimeImmutable();
         }
         
-        return $now->getTimestamp() > $this->getExpiresIn();
+        return $now->getTimestamp() >= $this->getExpiresIn();
     }
 
 
