@@ -55,13 +55,13 @@ final readonly class Authenticator
             throw new AuthorizationTokenException('Invalid response from Allegro API');
         }
 
-        $expires = new DateTimeImmutable('now + ' . $tokens['expires_in'] . ' seconds');
+        $expiresAt = time() + $tokens['expires_in'];
 
         return new Token(
             $tokens['access_token'],
             $tokens['token_type'],
             $tokens['refresh_token'],
-            $expires->getTimestamp(),
+            $expiresAt,
             $tokens['scope'],
             $tokens['allegro_api'],
             $tokens['jti'],
