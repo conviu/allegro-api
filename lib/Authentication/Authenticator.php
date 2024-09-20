@@ -55,7 +55,7 @@ final readonly class Authenticator
             throw new AuthorizationTokenException('Invalid response from Allegro API');
         }
 
-        $expiresAt = time() + intval($tokens['expires_in'] * 0.98);
+        $expiresAt = time() + intval($tokens['expires_in'] * 0.99);
 
         return new Token(
             $tokens['access_token'],

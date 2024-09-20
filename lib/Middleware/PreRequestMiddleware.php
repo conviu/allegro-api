@@ -11,7 +11,6 @@ use Psr\Http\Message\RequestInterface;
 
 final readonly class PreRequestMiddleware
 {
-
     public function __construct(
         private TokenRepositoryInterface $tokenRepository,
         private Authenticator $authenticator
@@ -20,9 +19,8 @@ final readonly class PreRequestMiddleware
 
     public function __invoke(callable $handler)
     {
-        $token = $this->tokenRepository->load();
-
-        return function (RequestInterface $request, $options) use ($handler, $token) {
+        return function (RequestInterface $request, $options) use ($handler) {
+            $token = $this->tokenRepository->load();
             if ($token->isExpired()) {
                 $token = $this->handleExpired($token);
                 $this->tokenRepository->save($token);
@@ -34,12 +32,10 @@ final readonly class PreRequestMiddleware
         };
     }
 
-
     private function handleExpired(Token $token): Token
     {
         $refreshToken = $token->getRefreshToken();
 
         return $this->authenticator->fetchToken(Authenticator::TOKEN_TYPE_REFRESH_TOKEN, $refreshToken);
     }
-
 }
